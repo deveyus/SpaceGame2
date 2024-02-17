@@ -1,0 +1,19 @@
+{
+  "name": "SpaceGame2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "LGPL-3.0-or-later",
+  "dependencies": {
+    "ts-results-es": "^4.1.0-alpha.1",
+    "uuid": "^9.0.1",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/uuid": "^9.0.7"
+  }
+}
