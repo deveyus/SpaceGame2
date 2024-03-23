@@ -8,7 +8,7 @@ interface ISpaceship {
     weapons: IWeapon[]; // Array of zero length for unarmed ships
     cargo: number; // Zero cargo is a ship with zero cargospace, not an error.
     lifeSupport: ILifeSupport;
-    powerPlant: IPowerPlant[];
+    powerPlants: IPowerPlant[];
 }
 
 interface IBoundedValue {
