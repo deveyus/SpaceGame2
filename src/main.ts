@@ -1,11 +1,13 @@
 // Factory function returns a fully initialized object
-import { ISpaceship, IBoundedValue, quality, fuelType, ammunition, IEngine, IBerthing, IWeapon, ILifeSupport, IPowerPlant } from "./interfaces";
+import { ISpaceship, IBoundedValue, quality, fuelType, ammunition, IEngine, IBerthing, IWeapon, ILifeSupport, IPowerPlant, IStarbase } from "./interfaces";
 import { Result, Ok, Err } from "ts-results-es";
 import { v4 as uuid } from "uuid";
+import util from 'util';
 
-function berthingFactory(berthingMass = 10, berthingVolume = 10, quality: quality = 3, berthingMaxCapacity = 10, berthingMaxHitpoints = 10, berthingMaxDurability = 10, berthingMaxPowerConsumption = 10): Result<IBerthing, Error> {
+function berthingFactory(name = `Berthing unit`, berthingMass = 10, berthingVolume = 10, quality: quality = 3, berthingMaxCapacity = 10, berthingMaxHitpoints = 10, berthingMaxDurability = 10, berthingMaxPowerConsumption = 10): Result<IBerthing, Error> {
     const berthing: IBerthing = {
         uuid: uuid(),
+        name: name,
         mass: berthingMass,
         volume: berthingVolume,
         quality: quality,
@@ -24,9 +26,9 @@ function lifeSupportFactory(lifeSupportMass = 50, name = 'living', lifeSupportMa
         mass: lifeSupportMass,
         volume: lifeSupportMass,
         powerConsumption: lifeSupportMass,
-        hitPoints: { current: 0, max: lifeSupportMaxPowerConsumption },
-        durability: { current: 0, max: lifeSupportMaxDurability },
-        efficiency: { current: 0, max: lifeSupportMaxEfficiency },
+        hitPoints: { current: lifeSupportMaxPowerConsumption, max: lifeSupportMaxPowerConsumption },
+        durability: { current: lifeSupportMaxDurability, max: lifeSupportMaxDurability },
+        efficiency: { current: lifeSupportMaxEfficiency, max: lifeSupportMaxEfficiency },
 
     }
     return Ok(lifeSupport)
@@ -75,7 +77,7 @@ function engineFactory(engineName = `fish`, engineMass = 500, engineVolume = 10,
     return Ok(engine)
 }
 
-function spaceshipFactory(name: `jump tiddy`, engines: IEngine[], weapons: IWeapon[], cargo = 10, berthing: IBerthing[], armor = 10, lifesupport: ILifeSupport, powerplants: IPowerPlant[]): Result<ISpaceship, Error> {
+function spaceshipFactory(name: string, engines: IEngine[], weapons: IWeapon[], berthing: IBerthing[], lifesupport: ILifeSupport, powerplants: IPowerPlant[], cargo = 10, armor = 10): Result<ISpaceship, Error> {
     const spaceShip: ISpaceship = {
         name: name,
         uuid: uuid(),
@@ -87,29 +89,55 @@ function spaceshipFactory(name: `jump tiddy`, engines: IEngine[], weapons: IWeap
         lifeSupport: lifesupport,
         powerPlants: powerplants,
     }
-
-    function spaceShipPrep(): object {
-        const berthing = [berthingFactory().unwrap()];
-        const lifeSupport = lifeSupportFactory().unwrap();
-        const power = [powerPlantFactory().unwrap()];
-        const weapons = [weaponFactory().unwrap()];
-        const engines = [engineFactory().unwrap()];
-
-        return spaceshipFactory(engines, weapons, berthing, lifeSupport, power);
-
-    }
-    
     return Ok(spaceShip)
+}
 
+function spaceShipPrep(): ISpaceship {
+    const berthing = [berthingFactory().unwrap()];
+    const lifeSupport = lifeSupportFactory().unwrap();
+    const power = [powerPlantFactory().unwrap()];
+    const weapons = [weaponFactory().unwrap()];
+    const engines = [engineFactory().unwrap()];
+
+    const test = spaceshipFactory(`jump tiddy`, engines, weapons, berthing, lifeSupport, power);
+
+    if (test.isErr()) {
+        console.error(test.unwrapErr())
+        process.exit(1);
+    }
+    return test.unwrap()
+}
+
+function starBaseFactory(name: string, weapons: IWeapon[], berthing: IBerthing[], lifesupport: ILifeSupport, powerplants: IPowerPlant[], cargo = 10, armor = 10): Result<IStarbase, Error> {
+    const starBase: IStarbase = {
+        name: name,
+        uuid: uuid(),
+        weapons: weapons,
+        cargo: cargo,
+        berthing: berthing,
+        armor: armor,
+        lifeSupport: lifesupport,
+        powerPlants: powerplants,
+    }
+
+    return Ok(starBase)
+}
+
+function starBasePrep(): IStarbase {
+    const berthing = [berthingFactory().unwrap()];
+    const lifeSupport = lifeSupportFactory().unwrap();
+    const power = [powerPlantFactory().unwrap()];
+    const weapons = [weaponFactory().unwrap()];
+
+    const test = starBaseFactory(`Fort Kickass`, weapons, berthing, lifeSupport, power)
+    
+    if (test.isErr()) {
+        console.error(test.unwrapErr())
+        process.exit(1);
+    }
+    return test.unwrap()
 }
 
 
-
-
-
-
-
-
-spaceshipFactory()
-
-console.log()
+//console.log(util.inspect(spaceShipPrep(), true, 10, true));
+console.log(util.inspect(starBasePrep(), true, 10, true));

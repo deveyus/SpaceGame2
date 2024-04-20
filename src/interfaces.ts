@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 interface ISpaceship {
+
     name: string;
     uuid: string;
     engines: IEngine[];
@@ -54,6 +55,7 @@ interface IEngine {
 }
 
 interface IBerthing {
+    name: string;
     uuid: string;
     mass: number;
     volume: number;
@@ -96,5 +98,39 @@ interface IPowerPlant {
     hitpoints: IBoundedValue;
     durability: IBoundedValue;
 }
+interface IStarbase {
+    name: string;
+    uuid: string;
+    weapons: IWeapon[];
+    cargo: number;
+    berthing: IBerthing[];
+    armor: number;
+    lifeSupport: ILifeSupport;
+    powerPlants: IPowerPlant[];
+}
 
-export {ISpaceship, IBoundedValue, quality, fuelType, ammunition, IEngine, IBerthing, IWeapon, ILifeSupport, IPowerPlant}
+enum BOMItem {
+    METAL_PLATES,
+    ELECTRONICS,
+    METAL_BEAMS,
+}
+
+interface IBOMItem {
+    name: BOMItem;
+    quantity: number;
+}
+
+interface IBom {
+    items: IBOMItem[];
+}
+
+
+
+
+export type Engine_Blueprint = IEngine & IBom;
+export type Berthing_Blueprint = IBerthing & IBom;
+export type Weapon_Blueprint = IWeapon & IBom;
+export type LifeSupport_Blueprint = ILifeSupport & IBom;
+export type PowerPlant_Blueprint = IPowerPlant & IBom;
+export type Blueprint = Engine_Blueprint | Berthing_Blueprint | Weapon_Blueprint | LifeSupport_Blueprint | PowerPlant_Blueprint;
+export { ISpaceship, IBoundedValue, quality, fuelType, ammunition, IEngine, IBerthing, IWeapon, ILifeSupport, IPowerPlant, IStarbase }

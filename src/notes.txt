@@ -1,0 +1,11 @@
+Each module is buildable via blueprint which defines the values in the module
+    Blueprints can be Researched.
+        Research can change both parameters and material costs of the items produced.
+
+
+blueprint object => research function => blueprint object *DIFFERENT THAN BEFORE*
+
+
+How does composition factor in to the need to represent both the materials and parameters of the modules?
+
+Pile of basic objects (basic building materials) => blueprint lists these quantities => factory consumes these quantities => module comes out

@@ -1,8 +1,12 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const ts_results_es_1 = require("ts-results-es");
 const uuid_1 = require("uuid");
-function berthingFactory(berthingMass = 10, berthingVolume = 10, quality, berthingMaxCapacity = 10, berthingMaxHitpoints = 10, berthingMaxDurability = 10, berthingMaxPowerConsumption = 10) {
+const util_1 = __importDefault(require("util"));
+function berthingFactory(berthingMass = 10, berthingVolume = 10, quality = 3, berthingMaxCapacity = 10, berthingMaxHitpoints = 10, berthingMaxDurability = 10, berthingMaxPowerConsumption = 10) {
     const berthing = {
         uuid: (0, uuid_1.v4)(),
         mass: berthingMass,
@@ -22,13 +26,13 @@ function lifeSupportFactory(lifeSupportMass = 50, name = 'living', lifeSupportMa
         mass: lifeSupportMass,
         volume: lifeSupportMass,
         powerConsumption: lifeSupportMass,
-        hitPoints: { current: 0, max: lifeSupportMaxPowerConsumption },
-        durability: { current: 0, max: lifeSupportMaxDurability },
-        efficiency: { current: 0, max: lifeSupportMaxEfficiency },
+        hitPoints: { current: lifeSupportMaxPowerConsumption, max: lifeSupportMaxPowerConsumption },
+        durability: { current: lifeSupportMaxDurability, max: lifeSupportMaxDurability },
+        efficiency: { current: lifeSupportMaxEfficiency, max: lifeSupportMaxEfficiency },
     };
     return (0, ts_results_es_1.Ok)(lifeSupport);
 }
-function powerPlantFactory(name = `Zippyzaps`, burnRateMax = 10, fuelTankMax = 10, hitPointsMax = 10, durabilityMax = 10, fuel) {
+function powerPlantFactory(name = `Zippyzaps`, burnRateMax = 10, fuelTankMax = 10, hitPointsMax = 10, durabilityMax = 10, fuel = 1) {
     // current burnrate will be a settable parameter.
     const powerPlant = {
         name: name,
@@ -41,7 +45,7 @@ function powerPlantFactory(name = `Zippyzaps`, burnRateMax = 10, fuelTankMax = 1
     };
     return (0, ts_results_es_1.Ok)(powerPlant);
 }
-function weaponFactory(name = "Banana Gun", weaponMass = 10, weaponPowerConsumption = 10, weaponAmmunition, weaponDamage = 10, weaponFireRate = 10, weaponDurability = 10, weaponHitPoints = 10) {
+function weaponFactory(name = "Banana Gun", weaponAmmunition = 1, weaponMass = 10, weaponPowerConsumption = 10, weaponDamage = 10, weaponFireRate = 10, weaponDurability = 10, weaponHitPoints = 10) {
     let weapon = {
         name: name,
         uuid: (0, uuid_1.v4)(),
@@ -66,19 +70,58 @@ function engineFactory(engineName = `fish`, engineMass = 500, engineVolume = 10,
     };
     return (0, ts_results_es_1.Ok)(engine);
 }
-function spaceshipFactory(name, engines, weapons, cargo = 10, berthing, armor = 10, lifesupport, powerplant) {
+function spaceshipFactory(name, engines, weapons, berthing, lifesupport, powerplants, cargo = 10, armor = 10) {
     const spaceShip = {
         name: name,
         uuid: (0, uuid_1.v4)(),
         engines: engines,
-        berthing: berthing,
-        armor: armor,
         weapons: weapons,
         cargo: cargo,
+        berthing: berthing,
+        armor: armor,
         lifeSupport: lifesupport,
-        powerPlant: powerplant,
+        powerPlants: powerplants,
     };
     return (0, ts_results_es_1.Ok)(spaceShip);
 }
-console.log(spaceshipFactory);
+function spaceShipPrep() {
+    const berthing = [berthingFactory().unwrap()];
+    const lifeSupport = lifeSupportFactory().unwrap();
+    const power = [powerPlantFactory().unwrap()];
+    const weapons = [weaponFactory().unwrap()];
+    const engines = [engineFactory().unwrap()];
+    const test = spaceshipFactory(`jump tiddy`, engines, weapons, berthing, lifeSupport, power);
+    if (test.isErr()) {
+        console.error(test.unwrapErr());
+        process.exit(1);
+    }
+    return test.unwrap();
+}
+function starBaseFactory(name, weapons, berthing, lifesupport, powerplants, cargo = 10, armor = 10) {
+    const starBase = {
+        name: name,
+        uuid: (0, uuid_1.v4)(),
+        weapons: weapons,
+        cargo: cargo,
+        berthing: berthing,
+        armor: armor,
+        lifeSupport: lifesupport,
+        powerPlants: powerplants,
+    };
+    return (0, ts_results_es_1.Ok)(starBase);
+}
+function starBasePrep() {
+    const berthing = [berthingFactory().unwrap()];
+    const lifeSupport = lifeSupportFactory().unwrap();
+    const power = [powerPlantFactory().unwrap()];
+    const weapons = [weaponFactory().unwrap()];
+    const test = starBaseFactory(`Fort Kickass`, weapons, berthing, lifeSupport, power);
+    if (test.isErr()) {
+        console.error(test.unwrapErr());
+        process.exit(1);
+    }
+    return test.unwrap();
+}
+//console.log(util.inspect(spaceShipPrep(), true, 10, true));
+console.log(util_1.default.inspect(starBasePrep(), true, 10, true));
 //# sourceMappingURL=main.js.map
