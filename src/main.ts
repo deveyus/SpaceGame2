@@ -1,8 +1,9 @@
 // Factory function returns a fully initialized object
-import { ISpaceship, IBoundedValue, quality, fuelType, ammunition, IEngine, IBerthing, IWeapon, ILifeSupport, IPowerPlant, IStarbase } from "./interfaces";
+import { ISpaceship, IBoundedValue, quality, fuelType, ammunition, IEngine, IBerthing, IWeapon, ILifeSupport, IPowerPlant, IStarbase, IBom, IBOMItem, BOMItem } from "./interfaces";
 import { Result, Ok, Err } from "ts-results-es";
 import { v4 as uuid } from "uuid";
 import util from 'util';
+import { getRandomIntInclusive } from "./helperFunctions";
 
 function berthingFactory(name = `Berthing unit`, berthingMass = 10, berthingVolume = 10, quality: quality = 3, berthingMaxCapacity = 10, berthingMaxHitpoints = 10, berthingMaxDurability = 10, berthingMaxPowerConsumption = 10): Result<IBerthing, Error> {
     const berthing: IBerthing = {
@@ -134,10 +135,40 @@ function starBasePrep(): IStarbase {
     if (test.isErr()) {
         console.error(test.unwrapErr())
         process.exit(1);
-    }
+    } 
     return test.unwrap()
 }
+// Sera, you are a cool bitch. Respect.
 
+// x_0 = IBOMItem.quantity*0.9 
+// x_1 = IBOMItem.quantity*1.1
+// newquantity = math.random() * (x_1 - x_0) + x_0
+
+
+//you know, dick jokes would be funnier if they weren't so hard to pull off.
+
+function researchBlueprintBOM(bom: IBom): IBom {
+    const randomizedItems: IBOMItem[] = bom.items.map(item => {
+      const itemMin = item.quantity * 0.9
+      const itemMax = item.quantity * 1.1
+      item.quantity = Math.random() * ( itemMax - itemMin ) + itemMin
+      
+      return item
+    })
+
+
+    return {
+        ...bom,
+        items: randomizedItems
+    }
+}
+
+const test: IBom = {
+    items: [
+        { name: BOMItem.METAL_BEAMS, quantity: 37 },
+        { name: BOMItem.ELECTRONICS, quantity: 15 }
+    ]
+}
 
 //console.log(util.inspect(spaceShipPrep(), true, 10, true));
-console.log(util.inspect(starBasePrep(), true, 10, true));
+console.log(util.inspect(researchBlueprintBOM(test), true, 10, true));

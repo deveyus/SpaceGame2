@@ -133,4 +133,4 @@ export type Weapon_Blueprint = IWeapon & IBom;
 export type LifeSupport_Blueprint = ILifeSupport & IBom;
 export type PowerPlant_Blueprint = IPowerPlant & IBom;
 export type Blueprint = Engine_Blueprint | Berthing_Blueprint | Weapon_Blueprint | LifeSupport_Blueprint | PowerPlant_Blueprint;
-export { ISpaceship, IBoundedValue, quality, fuelType, ammunition, IEngine, IBerthing, IWeapon, ILifeSupport, IPowerPlant, IStarbase }
+export { ISpaceship, IBoundedValue, quality, fuelType, ammunition, IEngine, IBerthing, IWeapon, ILifeSupport, IPowerPlant, IStarbase, IBom, IBOMItem, BOMItem }

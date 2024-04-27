@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ammunition = exports.fuelType = exports.quality = void 0;
+exports.BOMItem = exports.ammunition = exports.fuelType = exports.quality = void 0;
 var quality;
 (function (quality) {
     quality[quality["BROKEN"] = 0] = "BROKEN";
@@ -29,4 +29,10 @@ var ammunition;
     ammunition[ammunition["INCENDIARY"] = 5] = "INCENDIARY";
     ammunition[ammunition["ACID"] = 6] = "ACID"; //chemical reactions causing corrosion
 })(ammunition || (exports.ammunition = ammunition = {}));
+var BOMItem;
+(function (BOMItem) {
+    BOMItem[BOMItem["METAL_PLATES"] = 0] = "METAL_PLATES";
+    BOMItem[BOMItem["ELECTRONICS"] = 1] = "ELECTRONICS";
+    BOMItem[BOMItem["METAL_BEAMS"] = 2] = "METAL_BEAMS";
+})(BOMItem || (exports.BOMItem = BOMItem = {}));
 //# sourceMappingURL=interfaces.js.map

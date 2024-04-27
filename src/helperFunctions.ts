@@ -9,3 +9,5 @@ function getRandomIntInclusive(max: number, min = 1): Result<number, Error> {
     const range = max - min + 1
     return Ok(Math.floor(Math.random() * range + min));
 }
+
+export { getRandomIntInclusive }

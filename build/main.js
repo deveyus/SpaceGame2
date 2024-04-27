@@ -3,12 +3,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// Factory function returns a fully initialized object
+const interfaces_1 = require("./interfaces");
 const ts_results_es_1 = require("ts-results-es");
 const uuid_1 = require("uuid");
 const util_1 = __importDefault(require("util"));
-function berthingFactory(berthingMass = 10, berthingVolume = 10, quality = 3, berthingMaxCapacity = 10, berthingMaxHitpoints = 10, berthingMaxDurability = 10, berthingMaxPowerConsumption = 10) {
+const helperFunctions_1 = require("./helperFunctions");
+function berthingFactory(name = `Berthing unit`, berthingMass = 10, berthingVolume = 10, quality = 3, berthingMaxCapacity = 10, berthingMaxHitpoints = 10, berthingMaxDurability = 10, berthingMaxPowerConsumption = 10) {
     const berthing = {
         uuid: (0, uuid_1.v4)(),
+        name: name,
         mass: berthingMass,
         volume: berthingVolume,
         quality: quality,
@@ -122,6 +126,30 @@ function starBasePrep() {
     }
     return test.unwrap();
 }
+// Sera, you are a cool bitch. Respect.
+function researchBlueprintBOM(bom) {
+    const randomizedItems = bom.items.map(item => {
+        const randomQuantity = (0, helperFunctions_1.getRandomIntInclusive)(100);
+        if (randomQuantity.isErr()) {
+            console.error(randomQuantity.unwrapErr());
+            process.exit(1);
+        }
+        return {
+            name: item.name,
+            quantity: randomQuantity.value
+        };
+    });
+    return {
+        ...bom,
+        items: randomizedItems
+    };
+}
+const test = {
+    items: [
+        { name: interfaces_1.BOMItem.METAL_BEAMS, quantity: 37 },
+        { name: interfaces_1.BOMItem.ELECTRONICS, quantity: 15 }
+    ]
+};
 //console.log(util.inspect(spaceShipPrep(), true, 10, true));
-console.log(util_1.default.inspect(starBasePrep(), true, 10, true));
+console.log(util_1.default.inspect(researchBlueprintBOM(test), true, 10, true));
 //# sourceMappingURL=main.js.map
