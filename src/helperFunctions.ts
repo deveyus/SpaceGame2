@@ -11,3 +11,4 @@ function getRandomIntInclusive(max: number, min = 1): Result<number, Error> {
 }
 
 export { getRandomIntInclusive }
+

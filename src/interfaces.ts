@@ -1,6 +1,4 @@
-import { v4 as uuidv4 } from 'uuid';
 interface ISpaceship {
-
     name: string;
     uuid: string;
     engines: IEngine[];
@@ -12,9 +10,15 @@ interface ISpaceship {
     powerPlants: IPowerPlant[];
 }
 
-interface IBoundedValue {
-    current: number;
-    max: number;
+interface IStarbase {
+    name: string;
+    uuid: string;
+    weapons: IWeapon[];
+    cargo: number;
+    berthing: IBerthing[];
+    armor: number;
+    lifeSupport: ILifeSupport;
+    powerPlants: IPowerPlant[];
 }
 
 enum quality {
@@ -45,74 +49,64 @@ enum ammunition {
     ACID //chemical reactions causing corrosion
 }
 
-interface IEngine {
-    uuid: string;
-    name: string;
-    mass: number;
-    volume: number;
-    thrust: number;
-    powerConsumption: number;
-}
-
-interface IBerthing {
-    name: string;
-    uuid: string;
-    mass: number;
-    volume: number;
-    quality: number;
-    capacity: IBoundedValue;
-    hitPoints: IBoundedValue;
-    durability: IBoundedValue;
-    powerConsumption: number;
-}
-
-interface IWeapon {
-    name: string;
-    uuid: string;
-    mass: number;
-    powerConsumption: number;
-    ammunition: ammunition;
-    damage: number;
-    fireRate: number;
-    durability: number;
-    hitpoints: number;
-}
-
-interface ILifeSupport {
-    uuid: string;
-    name: string;
-    mass: number;
-    volume: number;
-    powerConsumption: number;
-    hitPoints: IBoundedValue;
-    durability: IBoundedValue;
-    efficiency: IBoundedValue;
-}
-
-interface IPowerPlant {
-    name: string;
-    uuid: string;
-    fuel: fuelType;
-    burnRate: IBoundedValue;
-    fuelTank: IBoundedValue;
-    hitpoints: IBoundedValue;
-    durability: IBoundedValue;
-}
-interface IStarbase {
-    name: string;
-    uuid: string;
-    weapons: IWeapon[];
-    cargo: number;
-    berthing: IBerthing[];
-    armor: number;
-    lifeSupport: ILifeSupport;
-    powerPlants: IPowerPlant[];
-}
-
 enum BOMItem {
     METAL_PLATES,
     ELECTRONICS,
-    METAL_BEAMS,
+    METAL_BEAMS, // Unmeltable by jet fuel
+}
+
+interface IBoundedValue {
+    current: number;
+    max: number;
+}
+
+interface ICoreStats {
+    coreStats: {
+        mass: number;
+        volume: number;
+        hitPoints: IBoundedValue;
+        durability: IBoundedValue;
+        powerConsumption: IBoundedValue;
+    }
+}
+
+interface IEngine {
+    partProps: {
+        thrust: number;
+    }
+}
+
+interface IBerthing {
+    partProps: {
+        quality: number;
+        capacity: IBoundedValue;
+    }
+}
+
+interface IWeapon {
+    partProps: {
+        ammunition: ammunition;
+        damage: number;
+        fireRate: number;
+    }
+}
+
+interface ILifeSupport {
+    partProps: {
+        efficiency: IBoundedValue;
+    }
+}
+
+interface IPowerPlant {
+    partProps: {
+        fuel: fuelType;
+        burnRate: IBoundedValue;
+        fuelTank: IBoundedValue;
+    }
+}
+
+interface IResearchData {
+    researchData: {};
 }
 
 interface IBOMItem {
@@ -124,13 +118,17 @@ interface IBom {
     items: IBOMItem[];
 }
 
+interface IMetaInfo {
+    metaInfo: {
+        uuid: string,
+        name: string
+    }
+}
 
-
-
-export type Engine_Blueprint = IEngine & IBom;
-export type Berthing_Blueprint = IBerthing & IBom;
-export type Weapon_Blueprint = IWeapon & IBom;
-export type LifeSupport_Blueprint = ILifeSupport & IBom;
-export type PowerPlant_Blueprint = IPowerPlant & IBom;
+export type Engine_Blueprint = IMetaInfo & ICoreStats & IResearchData & IEngine & IBom;
+export type Berthing_Blueprint = IMetaInfo & ICoreStats & IResearchData & IBerthing & IBom;
+export type Weapon_Blueprint = IMetaInfo & ICoreStats & IResearchData & IWeapon & IBom;
+export type LifeSupport_Blueprint = IMetaInfo & ICoreStats & IResearchData & ILifeSupport & IBom;
+export type PowerPlant_Blueprint = IMetaInfo & ICoreStats & IResearchData & IPowerPlant & IBom;
 export type Blueprint = Engine_Blueprint | Berthing_Blueprint | Weapon_Blueprint | LifeSupport_Blueprint | PowerPlant_Blueprint;
 export { ISpaceship, IBoundedValue, quality, fuelType, ammunition, IEngine, IBerthing, IWeapon, ILifeSupport, IPowerPlant, IStarbase, IBom, IBOMItem, BOMItem }

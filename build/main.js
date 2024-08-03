@@ -8,69 +8,114 @@ const interfaces_1 = require("./interfaces");
 const ts_results_es_1 = require("ts-results-es");
 const uuid_1 = require("uuid");
 const util_1 = __importDefault(require("util"));
-const helperFunctions_1 = require("./helperFunctions");
 function berthingFactory(name = `Berthing unit`, berthingMass = 10, berthingVolume = 10, quality = 3, berthingMaxCapacity = 10, berthingMaxHitpoints = 10, berthingMaxDurability = 10, berthingMaxPowerConsumption = 10) {
     const berthing = {
-        uuid: (0, uuid_1.v4)(),
-        name: name,
-        mass: berthingMass,
-        volume: berthingVolume,
-        quality: quality,
-        capacity: { current: berthingMaxCapacity, max: berthingMaxCapacity },
-        hitPoints: { current: berthingMaxHitpoints, max: berthingMaxHitpoints },
-        durability: { current: berthingMaxDurability, max: berthingMaxDurability },
-        powerConsumption: berthingMaxPowerConsumption,
+        metaInfo: {
+            uuid: (0, uuid_1.v4)(),
+            name: name
+        },
+        coreStats: {
+            mass: berthingMass,
+            volume: berthingVolume,
+            hitPoints: { current: berthingMaxHitpoints, max: berthingMaxHitpoints },
+            durability: { current: berthingMaxDurability, max: berthingMaxDurability },
+            powerConsumption: { current: berthingMaxPowerConsumption, max: berthingMaxPowerConsumption }
+        },
+        partProps: {
+            capacity: { current: berthingMaxCapacity, max: berthingMaxCapacity },
+            quality: quality
+        },
+        researchData: {},
+        items: []
     };
     return (0, ts_results_es_1.Ok)(berthing);
 }
-function lifeSupportFactory(lifeSupportMass = 50, name = 'living', lifeSupportMaxPowerConsumption = 10, lifeSupportMaxDurability = 10, lifeSupportMaxEfficiency = 10) {
+function lifeSupportFactory(lifeSupportMass = 50, name = 'living', lifeSupportVolume = 10, lifeSupportMaxHitpoints = 10, lifeSupportMaxPowerConsumption = 10, lifeSupportMaxDurability = 10, lifeSupportMaxEfficiency = 10) {
     const lifeSupport = {
-        uuid: (0, uuid_1.v4)(),
-        name: name,
-        mass: lifeSupportMass,
-        volume: lifeSupportMass,
-        powerConsumption: lifeSupportMass,
-        hitPoints: { current: lifeSupportMaxPowerConsumption, max: lifeSupportMaxPowerConsumption },
-        durability: { current: lifeSupportMaxDurability, max: lifeSupportMaxDurability },
-        efficiency: { current: lifeSupportMaxEfficiency, max: lifeSupportMaxEfficiency },
+        metaInfo: {
+            uuid: (0, uuid_1.v4)(),
+            name: name
+        },
+        coreStats: {
+            mass: lifeSupportMass,
+            volume: lifeSupportVolume,
+            hitPoints: { current: lifeSupportMaxHitpoints, max: lifeSupportMaxHitpoints },
+            durability: { current: lifeSupportMaxDurability, max: lifeSupportMaxDurability },
+            powerConsumption: { current: lifeSupportMaxPowerConsumption, max: lifeSupportMaxPowerConsumption }
+        },
+        partProps: {
+            efficiency: { current: lifeSupportMaxEfficiency, max: lifeSupportMaxEfficiency }
+        },
+        researchData: {},
+        items: []
     };
     return (0, ts_results_es_1.Ok)(lifeSupport);
 }
-function powerPlantFactory(name = `Zippyzaps`, burnRateMax = 10, fuelTankMax = 10, hitPointsMax = 10, durabilityMax = 10, fuel = 1) {
+function powerPlantFactory(name = `Zippyzaps`, powerPlantMass = 10, powerPlantVolume = 10, burnRateMax = 10, fuelTankMax = 10, hitPointsMax = 10, powerPlantMaxDurability = 10, powerPlantMaxPowerConsumption = 10, fuel = 1) {
     // current burnrate will be a settable parameter.
     const powerPlant = {
-        name: name,
-        uuid: (0, uuid_1.v4)(),
-        fuel: fuel,
-        burnRate: { current: burnRateMax, max: burnRateMax },
-        fuelTank: { current: fuelTankMax, max: fuelTankMax },
-        hitpoints: { current: hitPointsMax, max: hitPointsMax },
-        durability: { current: durabilityMax, max: durabilityMax }
+        metaInfo: {
+            uuid: (0, uuid_1.v4)(),
+            name: name
+        },
+        coreStats: {
+            mass: powerPlantMass,
+            volume: powerPlantVolume,
+            hitPoints: { current: hitPointsMax, max: hitPointsMax },
+            durability: { current: powerPlantMaxDurability, max: powerPlantMaxDurability },
+            powerConsumption: { current: powerPlantMaxPowerConsumption, max: powerPlantMaxPowerConsumption }
+        },
+        partProps: {
+            fuel: fuel,
+            burnRate: { current: burnRateMax, max: burnRateMax },
+            fuelTank: { current: fuelTankMax, max: fuelTankMax }
+        },
+        researchData: {},
+        items: []
     };
     return (0, ts_results_es_1.Ok)(powerPlant);
 }
-function weaponFactory(name = "Banana Gun", weaponAmmunition = 1, weaponMass = 10, weaponPowerConsumption = 10, weaponDamage = 10, weaponFireRate = 10, weaponDurability = 10, weaponHitPoints = 10) {
-    let weapon = {
-        name: name,
-        uuid: (0, uuid_1.v4)(),
-        mass: weaponMass,
-        powerConsumption: weaponPowerConsumption,
-        ammunition: weaponAmmunition,
-        damage: weaponDamage,
-        fireRate: weaponFireRate,
-        durability: weaponDurability,
-        hitpoints: weaponHitPoints,
+function weaponFactory(name = "Banana Gun", weaponAmmunition = 1, weaponMass = 10, weaponVolume = 10, weaponMaxPowerConsumption = 10, weaponDamage = 10, weaponFireRate = 10, weaponMaxDurability = 10, weaponMaxHitPoints = 10) {
+    const weapon = {
+        metaInfo: {
+            uuid: (0, uuid_1.v4)(),
+            name: name
+        },
+        coreStats: {
+            mass: weaponMass,
+            volume: weaponVolume,
+            powerConsumption: { current: weaponMaxPowerConsumption, max: weaponMaxPowerConsumption },
+            durability: { current: weaponMaxDurability, max: weaponMaxDurability },
+            hitPoints: { current: weaponMaxHitPoints, max: weaponMaxHitPoints },
+        },
+        partProps: {
+            fireRate: weaponFireRate,
+            damage: weaponDamage,
+            ammunition: weaponAmmunition,
+        },
+        researchData: {},
+        items: []
     };
     return (0, ts_results_es_1.Ok)(weapon);
 }
-function engineFactory(engineName = `fish`, engineMass = 500, engineVolume = 10, engineThrust = 10, enginePowerConsumption = 10) {
+function engineFactory(engineName = `fish`, engineMass = 500, engineVolume = 10, engineThrust = 10, engineMaxPowerConsumption = 10, engineMaxHitpoints = 10, engineMaxDurability = 10) {
     const engine = {
-        uuid: (0, uuid_1.v4)(),
-        name: engineName,
-        mass: engineMass,
-        volume: engineVolume,
-        thrust: engineThrust,
-        powerConsumption: enginePowerConsumption,
+        metaInfo: {
+            uuid: (0, uuid_1.v4)(),
+            name: engineName
+        },
+        coreStats: {
+            mass: engineMass,
+            volume: engineVolume,
+            hitPoints: { current: engineMaxHitpoints, max: engineMaxHitpoints },
+            durability: { current: engineMaxDurability, max: engineMaxDurability },
+            powerConsumption: { current: engineMaxPowerConsumption, max: engineMaxDurability },
+        },
+        partProps: {
+            thrust: engineThrust
+        },
+        researchData: {},
+        items: []
     };
     return (0, ts_results_es_1.Ok)(engine);
 }
@@ -126,23 +171,26 @@ function starBasePrep() {
     }
     return test.unwrap();
 }
-// Sera, you are a cool bitch. Respect.
 function researchBlueprintBOM(bom) {
     const randomizedItems = bom.items.map(item => {
-        const randomQuantity = (0, helperFunctions_1.getRandomIntInclusive)(100);
-        if (randomQuantity.isErr()) {
-            console.error(randomQuantity.unwrapErr());
-            process.exit(1);
-        }
-        return {
-            name: item.name,
-            quantity: randomQuantity.value
-        };
+        const itemMin = item.quantity * 0.9;
+        const itemMax = item.quantity * 1.1;
+        item.quantity = Math.random() * (itemMax - itemMin) + itemMin;
+        return item;
     });
     return {
         ...bom,
         items: randomizedItems
     };
+}
+function researchBlueprintPart(blueprint) {
+    for (const property in blueprint.partProps) {
+    }
+    for (const property in blueprint.coreStats) {
+    }
+    for (const property in blueprint.items) {
+    }
+    return blueprint;
 }
 const test = {
     items: [
@@ -151,5 +199,5 @@ const test = {
     ]
 };
 //console.log(util.inspect(spaceShipPrep(), true, 10, true));
-console.log(util_1.default.inspect(researchBlueprintBOM(test), true, 10, true));
+console.log(util_1.default.inspect(spaceShipPrep(), true, 10, true));
 //# sourceMappingURL=main.js.map
